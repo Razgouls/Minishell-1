@@ -4,7 +4,7 @@ int		simple_quote(char *whole_cmd, t_copy *copy)
 {
 	if (copy->i == (strlen(whole_cmd) -1)) // si le ' ouvrant est le dernier caractere de la chaine
 	{
-			ft_putstr_fd("bash: \' au bout de la chaine\n", 1);
+			ft_putstr_fd("bash: unexpected EOF while looking for matching `''\n", 1);
 			return (-1);
 	}
 	if (whole_cmd[copy->i + 1] == '\'' && (whole_cmd[copy->i + 2] == ' ' || whole_cmd[copy->i + 2] == '\0'))
@@ -13,7 +13,7 @@ int		simple_quote(char *whole_cmd, t_copy *copy)
 		copy->cmd[++copy->j] = whole_cmd[copy->i];
 	if ((copy->i == strlen(whole_cmd)) && whole_cmd[copy->i] != '\'') // si y a pas de ' fermant
 	{
-		ft_putstr_fd("bash: Pas de \' fermant\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching `''\n", 1);
 		return (-1);
 	}
 	copy->i++; // on decale de 1 car on est sur le ' fermant
@@ -25,7 +25,7 @@ int		simple_quote_arg(char *whole_cmd, t_copy *copy, size_t i) //////////segfaul
 	if (copy->i == (strlen(whole_cmd) -1)) // si le ' ouvrant est le dernier caractere de la chaine
 	{
 		error = -1;
-		ft_putstr_fd("bash: \' au bout de la chaine\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching `''\n", 1);
 		return (-1);
 	}
 	if (whole_cmd[copy->i + 1] == '\'' && (whole_cmd[copy->i + 2] == ' ' || whole_cmd[copy->i + 2] == '\0'))
@@ -35,7 +35,7 @@ int		simple_quote_arg(char *whole_cmd, t_copy *copy, size_t i) //////////segfaul
 	if ((copy->i == strlen(whole_cmd)) && whole_cmd[copy->i] != '\'') // si y a pas de ' fermant
 	{
 		error = -1;
-		ft_putstr_fd("bash: Pas de \' fermant\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching `''\n", 1);
 		return (-1);
 	}
 	copy->i++; // on decale de 1 car on est sur le ' fermant
@@ -47,7 +47,7 @@ int		simple_quote_redir(char *whole_cmd, t_copy *copy, int i, t_redir *redir, ch
 	if (copy->i == (strlen(whole_cmd) -1)) // si le ' ouvrant est le dernier caractere de la chaine
 	{
 		error = -1;
-		ft_putstr_fd("bash: \' au bout de la chaine\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching `''\n", 1);
 		return (-1);
 	}
 	if ((whole_cmd[copy->i + 1] == '\'' && whole_cmd[copy->i + 2] == ' ') && !str) // cas de : echo bonjour 1>'' pas normal //et : echo bonjour 1> "hey"'' pas normal
@@ -62,7 +62,7 @@ int		simple_quote_redir(char *whole_cmd, t_copy *copy, int i, t_redir *redir, ch
 	if ((copy->i == strlen(whole_cmd)) && whole_cmd[copy->i] != '\'') // si y a pas de ' fermant
 	{
 		error = -1;
-		ft_putstr_fd("bash: Pas de \' fermant\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching `''\n", 1);
 		return (-1);
 	}
 	str[redir->i + 1] = 0;
@@ -77,7 +77,7 @@ int		double_quote(char *whole_cmd, t_copy *copy)
 	int j;
 	if (copy->i == (strlen(whole_cmd) -1)) // si le " ouvrant est le dernier caractere de la chaine
 	{
-		ft_putstr_fd("bash: \" au bout de la chaine\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching \"\n", 1);
 		return (-1);
 	}
 	while (whole_cmd[copy->i] && whole_cmd[++copy->i] != '"') //++copy->i; //on decale de 1 car on est sur le " ouvrant
@@ -98,7 +98,7 @@ int		double_quote(char *whole_cmd, t_copy *copy)
 		copy->cmd[0] = '\0';
 	if ((copy->i == strlen(whole_cmd)) && whole_cmd[copy->i] != '"') // si y a pas de " fermant
 	{
-		ft_putstr_fd("bash: Pas de \" fermant\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching \"\n", 1);
 		return (-1);
 	}
 	copy->i++; // on decale de 1 car on est sur le " fermant
@@ -113,7 +113,7 @@ int		double_quote_arg(char *whole_cmd, t_copy *copy, size_t i)
 	if (copy->i == (strlen(whole_cmd) -1)) // si le " ouvrant est le dernier caractere de la chaine
 	{
 		error = -1;
-		ft_putstr_fd("bash: \" au bout de la chaine\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching \"\n", 1);
 		return (-1);
 	}
 	while (whole_cmd[copy->i] && whole_cmd[++copy->i] != '"') //++copy->i; //on decale de 1 car on est sur le " ouvrant
@@ -137,7 +137,7 @@ int		double_quote_arg(char *whole_cmd, t_copy *copy, size_t i)
 	if ((copy->i == strlen(whole_cmd)) && whole_cmd[copy->i] != '"') // si y a pas de " fermant
 	{
 		error = -1;
-		ft_putstr_fd("bash: Pas de \" fermant\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching \"\n", 1);
 		return (-1);
 	}
 	copy->i++; // on decale de 1 car on est sur le " fermant
@@ -153,7 +153,7 @@ int		double_quote_redir(char *whole_cmd, t_copy *copy, t_redir *redir, char *str
 	if (copy->i == (strlen(whole_cmd) -1)) // si le " ouvrant est le dernier caractere de la chaine
 	{
 		error = -1;
-		ft_putstr_fd("bash: \" au bout de la chaine\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching \"\n", 1);
 		return (-1);
 	}
 	if ((whole_cmd[copy->i + 1] == '"' && whole_cmd[copy->i + 2] == ' ') && !str) // cas de : echo bonjour 1>"" pas normal ou de : echo bonjour 1> "hey""" pas normal
@@ -190,7 +190,7 @@ int		double_quote_redir(char *whole_cmd, t_copy *copy, t_redir *redir, char *str
 	if ((copy->i == strlen(whole_cmd)) && whole_cmd[copy->i] != '"') // si y a pas de " fermant
 	{
 		error = -1;
-		ft_putstr_fd("bash: Pas de \" fermant\n", 1);
+		ft_putstr_fd("bash: unexpected EOF while looking for matching \"\n", 1);
 		return (-1);
 	}
 	str[redir->i + 1] = 0;

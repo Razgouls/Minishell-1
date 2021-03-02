@@ -19,19 +19,23 @@ char    *remalloc_cmdargs(t_copy *copy, char *value, char *whole_cmd, char *str)
 int	    environnement(char *whole_cmd, t_copy *copy, int arg, int i) //variable d'environnement dans un argument ou dans la commande
 {
 	char *name;
+    int  quote;
     char *value;
     int j;
     int count = -1;
 
     value = NULL;
+    quote = 0;
     name = NULL;
     if (!(name = malloc(sizeof(char) * strlen(whole_cmd) + 1)))
 		return (-1);
     j = 0;
+    if (whole_cmd[copy->i - 1] == '"' || whole_cmd[copy->i - 1] == '\'') // cas de $PA\TH ou faut pas mettre le backslash
+        quote = 1;
     while (whole_cmd[copy->i] && whole_cmd[copy->i] == '$' && (whole_cmd[copy->i + 1] == '\0' || whole_cmd[copy->i + 1] == '$' || whole_cmd[copy->i - 1] == '$'))
     {
         if (arg == 0) // pour le cas de : echo "$PAT\H"
-            copy->cmd[++copy->j] = whole_cmd[copy->i];
+                copy->cmd[++copy->j] = whole_cmd[copy->i];
         if (arg == 1)
             copy->args[i][++copy->j] = whole_cmd[copy->i];
         copy->i++;
@@ -63,12 +67,14 @@ int	    environnement(char *whole_cmd, t_copy *copy, int arg, int i) //variable 
     //printf("value = %s\n", value);
     if (!value)
     {
-        if (whole_cmd[copy->i] == '\\' && arg == 0) // pour le cas de : echo "$PAT\H"
+        if (whole_cmd[copy->i] == '\\' && arg == 0 && quote == 1) // pour le cas de : echo "$PAT\H"
             copy->cmd[++copy->j] = whole_cmd[copy->i];
-        if (whole_cmd[copy->i] == '\\' && arg == 1)
+        if (whole_cmd[copy->i] == '\\' && arg == 1 && quote == 1)
             copy->args[i][++copy->j] = whole_cmd[copy->i];
         //printf("ca rentre a whole_cmd[%d] = %c\n", copy->i, whole_cmd[copy->i]);
         if (whole_cmd[copy->i] == '"' || whole_cmd[copy->i] == '\'')
+            copy->i--;
+        if (whole_cmd[copy->i] == '$' && whole_cmd[copy->i - 1] != '\\')
             copy->i--;
         //printf("ca rentre a whole_cmd[%d] = %c\n", copy->i, whole_cmd[copy->i]);
         //printf("copy->i = %d, whole_cmd[copy->i]= %c\n", copy->i, whole_cmd[copy->i]);
